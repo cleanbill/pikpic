@@ -6,10 +6,10 @@ angular.module('core').service('Pictures',
 				    this.get = function(){
 					var deferred = $q.defer();
 					if (angular.isDefined($rootScope.years)){
-					    console.log("Already loaded picture data...");
+					    console.log('Already loaded picture data...');
 					    deferred.resolve($rootScope.years);
 					} else {
-					    console.log("Loading picture data...");
+					    console.log('Loading picture data...');
 					    $http.get('/unpicked').then(function(d){
 						$rootScope.years =d.data;
 						console.log(d.data);

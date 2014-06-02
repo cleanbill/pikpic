@@ -8,21 +8,24 @@ String.prototype.endsWith = function(suffix) {
 
 var unpicked = function(dir, done) {
     var noPicked = true;
-    var check = function(file,done){
+    var picked = function(file){
 	    if (fs.statSync(file).isDirectory()) {
 		    //console.log(file+' ends with picked '+file.endsWith('_picked'));
 		    if (file.endsWith('_picked')){
-			done(false);
+			return true;
 		    }	
 		
 	    }
+	return false;
     };
     var list = fs.readdirSync(dir);
     for(var x=0;x < list.length;x++){
         var file = dir + '/' + list[x];
-	check(file,done);
+	if (picked(file)){
+	    return false;
+	}    
     }
-    return done(true);
+    return true;
 };
 
 var getPictures = function(dir,pics){
@@ -42,17 +45,15 @@ var getPictures = function(dir,pics){
 var unpicks = function(dir,todo) {
     var check = function(file,filename,todo){
 	if (fs.statSync(file).isDirectory()) {
-	    unpicked(file,function(d){
-		if (d){
-		    var pics = [];
-		    getPictures(file,pics);
-		    //console.log('pics are '+pics);
-		    todo[filename] = {file:file,pictures:pics};
-		} else {    
-		    console.log(file+' has been done');
-		}    
-	    });	
-	}
+	    if (unpicked(file)){
+		var pics = [];
+		getPictures(file,pics);
+		//console.log('pics are '+pics);
+		todo[filename] = {file:file,pictures:pics};
+	    } else {    
+		console.log(file+' has been done');
+	    }    
+	}		
     };  
     var list = fs.readdirSync(dir); 
     for(var x=0;x < list.length;x++){
