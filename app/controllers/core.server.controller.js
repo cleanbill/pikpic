@@ -37,6 +37,8 @@ var getPictures = function(dir,pics){
     }
 };
 
+
+
 var unpicks = function(dir,todo) {
     var check = function(file,filename,todo){
 	if (fs.statSync(file).isDirectory()) {
@@ -45,7 +47,7 @@ var unpicks = function(dir,todo) {
 		    var pics = [];
 		    getPictures(file,pics);
 		    //console.log('pics are '+pics);
-		    todo.push({file:file,name:filename,pictures:pics});
+		    todo[filename] = {file:file,pictures:pics};
 		} else {    
 		    console.log(file+' has been done');
 		}    
@@ -61,14 +63,16 @@ var unpicks = function(dir,todo) {
 
 exports.unpicked = function(req,res){
     var fs = require('fs');
-    var imgDir = process.cwd()+'/public/modules/core/years/'+req.params.year+'/';
-//    var imgDir = process.cwd()+'/public/modules/core/years/2014/water/';
-    console.log('Image dir is '+imgDir);
-    var todo = [];
-    unpicks(imgDir,todo);
-    var data = {links:todo,year:req.params.year};
-    console.log('data is...');
-    console.log(data);
+    var data ={};
+    for(var y=2006;y < 2015;y++){
+	var imgDir = process.cwd()+'/public/modules/core/years/'+y+'/';
+	console.log('Image dir is '+imgDir);
+	var todo = {};
+	unpicks(imgDir,todo);
+	data[y] = todo;
+	console.log('data is...');
+	console.log(data);
+    }
     res.jsonp(data);
 
 //    walk(imgDir, function(nowt,list){
