@@ -9,7 +9,7 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 		// Home state routing
 		$stateProvider.
 		state('picker', {
-			url: '/picker',
+			url: '/picker/:year/:name',
 			templateUrl: 'modules/core/views/picker.client.view.html'
 		}).
 		state('home', {

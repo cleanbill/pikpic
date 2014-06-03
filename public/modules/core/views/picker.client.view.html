@@ -1,3 +1,7 @@
 <section data-ng-controller="PickerController">
-	This is the Picker view {{pictures}} {{years}}
+  <div class="row">
+    <span class="col-md-2" ng-click="prev()"><h1><</h1></span>
+    <img  class="col-md-8" width=50% height=50% src="{{link}}"></img>
+    <span class="col-md-2" ng-click="next()"><h1>></h1></span>
+  </div>
 </section>

@@ -1,8 +1,8 @@
 <section data-ng-controller="HomeController">
 
-  <div ng-repeat="(key, alb) in years"> 
-    <h1>{{key}}</h1>
-    <div ng-repeat="(name, value) in alb">
-      <div ng-click="goto(link)" >{{name}}</div>
+  <div ng-repeat="(year, album) in years"> 
+    <h1>{{year}}</h1>
+    <div ng-repeat="(name, value) in album">
+      <div ng-click="goto(year,name)" >{{name}}</div>
     </div>  
 </section>
