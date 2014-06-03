@@ -17,6 +17,6 @@ angular.module('core').service('Pictures',
 					    });
 					}
 					return deferred.promise;
-				    }
+				    };
 				}
 ]);

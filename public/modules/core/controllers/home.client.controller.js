@@ -11,6 +11,6 @@ angular.module('core').controller('HomeController',
 				       });   
 				       $scope.goto = function(year,name){
 					   $location.path('/picker/'+year+'/'+name);
-				      }	   
+				      };	   
 				   }
 ]);
