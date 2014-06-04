@@ -6,6 +6,10 @@ angular.module('core').controller('PickerController', ['$scope','Pictures','$sta
 		$scope.link = $scope.data.pictures[$scope.c].link;
 		$scope.pickOn  = ($scope.c in $scope.pick);
 		$scope.printOn = ($scope.c in $scope.print);
+		$scope.angle = 0;
+		if ($scope.c in $scope.rotateAngle){
+		    $scope.angle = $scope.rotateAngle[$scope.c];
+		}    
 	    };	
 	    Pictures.get().then(function(d){
 		$scope.years = d;
@@ -14,9 +18,9 @@ angular.module('core').controller('PickerController', ['$scope','Pictures','$sta
 		$scope.data = $scope.years[$scope.year][$scope.name];
 		$scope.c = 0;
                 $scope.pickedQty = 0;
-		$scope.angle = 0;
 		$scope.pick   = {};
 		$scope.print  = {};
+		$scope.rotateAngle = {};
 		$scope.setup();
 	    });   
 	    $scope.unpick = function(){
@@ -27,7 +31,7 @@ angular.module('core').controller('PickerController', ['$scope','Pictures','$sta
 	    $scope.next = function(){
 		$scope.pickedQty = Object.keys($scope.pick).length;
 		$scope.c = $scope.c + 1;
-		if ($scope.c === $scope.data.length){
+		if ($scope.c > $scope.data.pictures.length -1){
 		    $scope.c = 0;
 		}
 		$scope.setup();
@@ -53,6 +57,7 @@ angular.module('core').controller('PickerController', ['$scope','Pictures','$sta
 	    };	
 	    $scope.rotate = function(){
 		$scope.angle = ($scope.angle+90)%360;
+		$scope.rotateAngle[$scope.c] = $scope.angle;
             };	
 	     
 	}
