@@ -34,7 +34,10 @@ var getPictures = function(dir,pics){
         var file = dir + '/' + list[x];
 	if (fs.statSync(file).isDirectory()) {
 	    getPictures(file,pics);
-	} else if (file.endsWith('JPG') || file.endsWith('jpg') || file.endsWith('WAV') || file.endsWith('wav') || file.endsWith('AVI') || file.endsWith('avi')){	   
+	} else if (file.endsWith('JPG') || file.endsWith('jpg') 
+	       //|| file.endsWith('WAV') || file.endsWith('wav') 
+               //|| file.endsWith('AVI') || file.endsWith('avi')
+               ){	   
 	    pics.push({file:file,link:file.substring(30,file.length)});
 	}    
     }
