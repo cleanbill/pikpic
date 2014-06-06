@@ -18,5 +18,10 @@ angular.module('core').service('Pictures',
 					}
 					return deferred.promise;
 				    };
+				    this.done = function(pick,print,rotate){
+					console.log('Pictures have been picked...');
+					var data = {'pick':pick,'print':print,'rotate':rotate};
+					return $http.post('done',data);
+				    };
 				}
 ]);

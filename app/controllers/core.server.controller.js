@@ -65,6 +65,17 @@ var unpicks = function(dir,todo) {
     }
 };
 
+exports.done = function(req,res){
+    //console.log(req);
+    console.log('req.body.pick');
+    console.log(req.body.pick);
+    console.log('req.body.print');
+    console.log(req.body.print);
+    console.log('req.body.rotateAngle');
+    console.log(req.body.rotate);
+    res.end('OK');
+};
+
 exports.unpicked = function(req,res){
     var fs = require('fs');
     var data ={};

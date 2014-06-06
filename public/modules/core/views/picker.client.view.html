@@ -1,12 +1,13 @@
 <section data-ng-controller="PickerController">
   <div class="row">
-    <span class="col-md-1" ><h1>{{c+1}}/{{pickedQty}}</h1>({{angle}})</span>
-    <img  class="col-md-7" degrees='angle' rotate ng-click="rotate()" width=50% height=50% src="{{link}}" /> 
-    <span class="col-md-2 btn" ng-click="prev()"><h1><</h1></span>
-    <span class="col-md-2 btn" ng-click="next()"><h1>></h1></span>
+    
+    <span class="col-md-2 btn btn-info" ng-click="done()"><h1>DONE</h1></span>
+    <img  class="col-md-7" degrees='angle' rotate ng-click="rotate()" width=60% height=60% src="{{link}}" /> 
+    <span class="col-md-2 btn btn-warning" ng-click="next()"><h1>></h1></span>
     <span class="col-md-2 btn btn-success" ng-class="{black: pickOn}" ng-click="doPick(link)"><h1>Pick</h1></span>
+    <span class="col-md-2 btn btn-warning" ng-click="prev()"><h1><</h1></span>
     <span class="col-md-2 btn btn-success" ng-class="{black: printOn}" ng-click="doPrint(link)"><h1>4 Wall</h1></span>
     <span class="col-md-2 btn btn-danger" ng-click="unpick(link)"><h1>Unpick</h1></span>
-    <span class="col-md-2 btn btn-info" ng-click="done()"><h1>DONE</h1></span>
+    <div class="col-md-2 btn" ><h1>{{c+1}}/{{data.pictures.length}} - {{pickedQty}}</h1>({{angle}})</div>
   </div>
 </section>

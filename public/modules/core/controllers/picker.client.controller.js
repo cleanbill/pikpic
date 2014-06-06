@@ -1,14 +1,14 @@
 'use strict';
 
-angular.module('core').controller('PickerController', ['$scope','Pictures','$stateParams',
-	function($scope,Pictures,$stateParams) {
+angular.module('core').controller('PickerController', ['$scope','Pictures','$stateParams','$location',
+	function($scope,Pictures,$stateParams,$location) {
 	    $scope.setup = function(){
 		$scope.link = $scope.data.pictures[$scope.c].link;
 		$scope.pickOn  = ($scope.c in $scope.pick);
 		$scope.printOn = ($scope.c in $scope.print);
 		$scope.angle = 0;
 		if ($scope.c in $scope.rotateAngle){
-		    $scope.angle = $scope.rotateAngle[$scope.c];
+		    $scope.angle = $scope.rotateAngle[$scope.c].angle;
 		}    
 	    };	
 	    Pictures.get().then(function(d){
@@ -57,8 +57,15 @@ angular.module('core').controller('PickerController', ['$scope','Pictures','$sta
 	    };	
 	    $scope.rotate = function(){
 		$scope.angle = ($scope.angle+90)%360;
-		$scope.rotateAngle[$scope.c] = $scope.angle;
+		var pic = $scope.data.pictures[$scope.c];
+		pic.angle = $scope.angle;
+		$scope.rotateAngle[$scope.c] = pic;
             };	
+	    $scope.done = function(){
+		Pictures.done($scope.pick,$scope.print,$scope.rotateAngle).then(function(d){
+		    $location.path('/');
+		});
+	    };
 	     
 	}
 ]);

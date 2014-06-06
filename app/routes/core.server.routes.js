@@ -5,6 +5,7 @@ module.exports = function(app) {
 	var core = require('../../app/controllers/core');
 	app.route('/').get(core.index);
 	app.route('/unpicked').get(core.unpicked);
+	app.route('/done').post(core.done);
 
 
 };
