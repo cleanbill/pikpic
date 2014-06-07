@@ -11,7 +11,7 @@ angular.module('core').controller('HomeController',
 					   $scope.total = 0;
 					   for (var year in $scope.years){
 					       for (var name in $scope.years[year]){
-						   $scope.total = $scope.total + $scope.years[year][name].pictures.length
+						   $scope.total = $scope.total + $scope.years[year][name].pictures.length;
 					       }
 					   }    
 				       });   

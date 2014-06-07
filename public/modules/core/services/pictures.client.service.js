@@ -18,10 +18,13 @@ angular.module('core').service('Pictures',
 					}
 					return deferred.promise;
 				    };
-				    this.done = function(pick,print,rotate){
+				    this.done = function(pick,print,rotate,root,name){
 					console.log('Pictures have been picked...');
-					var data = {'pick':pick,'print':print,'rotate':rotate};
+					var data = {'pick':pick,'print':print,'rotate':rotate,'root':root,'name':name};
 					return $http.post('done',data);
 				    };
+				    this.clear = function(){
+					delete $rootScope.years;
+				    };	
 				}
 ]);

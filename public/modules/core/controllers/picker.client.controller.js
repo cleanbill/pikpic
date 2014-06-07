@@ -53,7 +53,7 @@ angular.module('core').controller('PickerController', ['$scope','Pictures','$sta
 	    };	
 	    $scope.doPrint = function(){
 		$scope.print[$scope.c] = $scope.data.pictures[$scope.c];
-		$scope.setPick();
+		$scope.next();
 	    };	
 	    $scope.rotate = function(){
 		$scope.angle = ($scope.angle+90)%360;
@@ -62,7 +62,8 @@ angular.module('core').controller('PickerController', ['$scope','Pictures','$sta
 		$scope.rotateAngle[$scope.c] = pic;
             };	
 	    $scope.done = function(){
-		Pictures.done($scope.pick,$scope.print,$scope.rotateAngle).then(function(d){
+		Pictures.done($scope.pick,$scope.print,$scope.rotateAngle,$scope.data.file,$scope.name).then(function(d){
+		    Pictures.clear();
 		    $location.path('/');
 		});
 	    };
