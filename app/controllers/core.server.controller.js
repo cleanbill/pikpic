@@ -109,12 +109,17 @@ exports.done = function(req,res){
 	}
 	var key = keys[at];
 	console.log('About to rotate ');
-	console.log(req.body.rotate[key].file);
-	console.log(req.body.rotate[key].angle);
-	doRotation(req.body.rotate[key].file,req.body.rotate[key].angle).then(function(d){	    
-	    return rotate(keys,at+1);
-	},function(err){exit(-1);});
-    }
+	console.log(at+'. key is '+key);
+        console.log(' which is... ');
+	console.log(req.body.rotate[key]);
+	if (req.body.rotate[key] !== undefined) {
+	    console.log(req.body.rotate[key].file);
+	    console.log(req.body.rotate[key].angle);
+	    doRotation(req.body.rotate[key].file,req.body.rotate[key].angle).then(function(d){	    
+		return rotate(keys,at+1);
+	    },function(err){exit(-1);});
+	}    
+    };
     var keys = [];
     for(var k in req.body.rotate) keys.push(k);
     rotate(keys,0);
