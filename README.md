@@ -1,5 +1,5 @@
 Pikpic has been written to help us to sort out all our photographs (21500+ of them!)
-It's done with.... Although nothing is really stored mongo, rather it moves files around and creats sym links.
+It's done with.... Although nothing is really stored mongo, rather it moves files around and create sym links.
 
 [![MEAN.JS Logo](http://meanjs.org/img/logo-small.png)](http://meanjs.org/)
 

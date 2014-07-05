@@ -3,6 +3,8 @@
 var fs = require('fs');
 var gm = require('gm').subClass({ imageMagick: true });
 var q = require('q');
+var ncp = require('ncp').ncp;
+var spawn = require('child_process').spawn;
 
 String.prototype.endsWith = function(suffix) {
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
@@ -56,9 +58,12 @@ var unpicks = function(dir,todo) {
 		//console.log('pics are '+pics);
 		todo[filename] = {file:file,pictures:pics,name:filename};
 	    } else {    
-		//console.log(file+' has been done');
-	    }    
-	}		
+		console.log(file+' has been done');
+	    }
+    
+	} else {
+            console.log(file+' is a file');
+        }		
     };  
     var list = fs.readdirSync(dir); 
     for(var x=0;x < list.length;x++){
@@ -150,8 +155,7 @@ exports.done = function(req,res){
     res.end('OK');
 };
 
-exports.unpicked = function(req,res){
-    var fs = require('fs');
+var getData = function(){
     var data ={};
     for(var y=2006;y < 2015;y++){
 	var imgDir = process.cwd()+'/public/modules/core/years/'+y+'/';
@@ -162,13 +166,81 @@ exports.unpicked = function(req,res){
 	//console.log('data is...');
 	//console.log(data);
     }
-    res.jsonp(data);
+    return data;
+};
 
-//    walk(imgDir, function(nowt,list){
-//	console.log(lixxxxst);
-//	res.jsonp(list);
-//    });
+exports.unpicked = function(req,res){
+    res.jsonp(getData());
+};
 
+var cpDir = function(source,dest){
+    ncp(source, dest, function (err) {
+	if (err) {
+	    return console.error(err);
+	}
+	console.log('done!');
+    });
+};
+
+var deleteFolderRecursive = function(path) {
+    if( fs.existsSync(path) ) {
+	fs.readdirSync(path).forEach(function(file,index){
+	    var curPath = path + '/' + file;
+	    if(fs.lstatSync(curPath).isDirectory()) { // recurse
+		deleteFolderRecursive(curPath);
+	    } else { // delete file
+		fs.unlinkSync(curPath);
+	    }
+	});
+	fs.rmdirSync(path);
+    }
+};
+
+var dozip = function(zipthis) {
+    // Options -r recursive -j ignore directory info - redirect to stdout
+    var zip = spawn('zip', ['-r', 'unpicks.zip', zipthis]);
+
+    // Keep writing stdout to res
+    zip.stdout.on('data', function (data) {
+        console.log(data);
+    });
+
+    zip.stderr.on('data', function (data) {
+        // Uncomment to see the files being added
+        console.log('zip stderr: ' + data);
+    });
+
+    // End the response on zip exit
+    zip.on('exit', function (code) {
+        if(code !== 0) {
+            console.log('zip process exited with code ' + code);
+        }
+    });
+};
+
+exports.zipit = function(req, res){
+    var tozip = [];
+    var dirName = 'zipdir';
+    var years = getData();
+    deleteFolderRecursive(dirName);
+    fs.mkdirSync(dirName);
+    for (var year in years){
+        fs.mkdirSync(dirName+'/'+year);
+	for (var name in years[year]){
+	    var source = years[year][name].file;
+            var target = dirName+'/'+year+'/'+name;
+            var x=2;	
+            while(fs.existsSync(target) ) {
+                target = dirName+'/'+name+x;
+            }
+	    tozip.push(source);
+            console.log(source);
+            fs.mkdirSync(target);
+	    cpDir(source,target);
+	}
+    }   
+    dozip(dirName); 	
+    res.jsonp(tozip);				   
 };
 
 /**

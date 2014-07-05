@@ -6,6 +6,7 @@ module.exports = function(app) {
 	app.route('/').get(core.index);
 	app.route('/unpicked').get(core.unpicked);
 	app.route('/done').post(core.done);
+	app.route('/zip').get(core.zipit);
 
 
 };

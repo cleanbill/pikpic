@@ -18,6 +18,15 @@ angular.module('core').service('Pictures',
 					}
 					return deferred.promise;
 				    };
+				    this.zip = function(){
+					var deferred = $q.defer();
+					console.log('Zipping picture data...');
+					$http.get('/zip').then(function(d){
+					    console.log(d.data);
+					    deferred.resolve(d.data);
+					});
+					return deferred.promise;
+				    };
 				    this.done = function(pick,print,rotate,root,name){
 					console.log('Pictures have been picked...');
 					var data = {'pick':pick,'print':print,'rotate':rotate,'root':root,'name':name};

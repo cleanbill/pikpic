@@ -1,8 +1,10 @@
 <section data-ng-controller="HomeController">
   There are {{total}} photos to go through
+  <div class="btn btn-info" ng-click="zipit()">Zip it</div>{{tozip}}
   <div ng-repeat="(year, album) in years"> 
+        
     <h1>{{year}}</h1>
-    <div ng-repeat="(name, value) in album">
-      <div ng-click="goto(year,name)" >{{name}}</div>
+    <div ng-repeat="(name, value) in album">            
+      <div title="{{value['file']}}" ng-click="goto(year,name)" >{{name}}</div>
     </div>  
 </section>

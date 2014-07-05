@@ -1,6 +1,5 @@
 'use strict';
 
-
 angular.module('core').controller('HomeController', 
 				  ['$scope', 'Authentication','Pictures','$location',
 				   function($scope, Authentication,Pictures,$location) {
@@ -15,6 +14,11 @@ angular.module('core').controller('HomeController',
 					       }
 					   }    
 				       });   
+				       $scope.zipit = function(){
+					   Pictures.zip().then(function(d){
+                                              $scope.zipit = d;
+                                           });
+				       };
 				       $scope.goto = function(year,name){
 					   $location.path('/picker/'+year+'/'+name);
 				      };	   
