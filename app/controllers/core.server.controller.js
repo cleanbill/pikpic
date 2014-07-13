@@ -72,7 +72,49 @@ var unpicks = function(dir,todo) {
     }
 };
 
-exports.done = function(req,res){
+// Rotate all images
+var doRotation = function(file,angle){
+    var deferred = q.defer();
+    try {
+	gm(file).rotate('black', angle)
+	    .write('/tmp/boom.jpg', function (err) {
+		if (err) {
+		    console.log('write rotate error "'+err+'"');
+		    deferred.reject(err);
+		    exit(-1);
+		} else {
+		    fs.renameSync('/tmp/boom.jpg',file);
+		    console.log('Rotated '+file+' '+angle+' degrees');
+		    deferred.resolve('done');
+		}	
+	    });
+    } catch(err){
+	console.log('rotate error "'+err+'"');
+	deferred.reject(err);
+	exit(-1);
+    }
+    return deferred.promise;
+};
+ 
+var rotate = function(keys,at){
+    if (at > keys.length){
+	return;
+    }
+    var key = keys[at];
+    console.log('About to rotate ');
+    console.log(at+'. key is '+key);
+    console.log(' which is... ');
+    console.log(req.body.rotate[key]);
+    if (req.body.rotate[key] !== undefined) {
+	console.log(req.body.rotate[key].file);
+	console.log(req.body.rotate[key].angle);
+	doRotation(req.body.rotate[key].file,req.body.rotate[key].angle).then(function(d){	    
+	    return rotate(keys,at+1);
+	},function(err){exit(-1);});
+    }    
+};
+
+var debugData = function(req){
     //console.log(req); 
     console.log('req.body.name');
     console.log(req.body.name);
@@ -84,47 +126,12 @@ exports.done = function(req,res){
     console.log(req.body.print);
     console.log('req.body.rotateAngle');
     console.log(req.body.rotate);
+};
+
+exports.done = function(req,res){
     
-    // Rotate all images
-    var doRotation = function(file,angle){
-	var deferred = q.defer();
-	try {
-	    gm(file).rotate('black', angle)
-		.write('/tmp/boom.jpg', function (err) {
-		    if (err) {
-			console.log('write rotate error "'+err+'"');
-			deferred.reject(err);
-			exit(-1);
-		    } else {
-			fs.renameSync('/tmp/boom.jpg',file);
-			console.log('Rotated '+file+' '+angle+' degrees');
-			deferred.resolve('done');
-		    }	
-		});
-	} catch(err){
-	    console.log('rotate error "'+err+'"');
-	    deferred.reject(err);
-	    exit(-1);
-	}
-	return deferred.promise;
-    };
-    var rotate = function(keys,at){
-	if (at > keys.length){
-	    return;
-	}
-	var key = keys[at];
-	console.log('About to rotate ');
-	console.log(at+'. key is '+key);
-        console.log(' which is... ');
-	console.log(req.body.rotate[key]);
-	if (req.body.rotate[key] !== undefined) {
-	    console.log(req.body.rotate[key].file);
-	    console.log(req.body.rotate[key].angle);
-	    doRotation(req.body.rotate[key].file,req.body.rotate[key].angle).then(function(d){	    
-		return rotate(keys,at+1);
-	    },function(err){exit(-1);});
-	}    
-    };
+    debugData(req);
+    
     var keys = [];
     for(var k in req.body.rotate) keys.push(k);
     rotate(keys,0);
@@ -151,7 +158,6 @@ exports.done = function(req,res){
 	var pickedFile = pickedDir+'/'+req.body.pick[key].name;
 	fs.renameSync(req.body.pick[key].file, pickedFile);
     }
-
     res.end('OK');
 };
 
@@ -176,9 +182,10 @@ exports.unpicked = function(req,res){
 var cpDir = function(source,dest){
     ncp(source, dest, function (err) {
 	if (err) {
-	    return console.error(err);
-	}
-	console.log('done!');
+	    console.error(err);
+	} else {
+	    console.log('done '+source+' to '+dest);
+        }
     });
 };
 
